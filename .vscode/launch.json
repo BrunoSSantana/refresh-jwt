@@ -1,0 +1,13 @@
+{
+  "configurations": [
+
+    {
+      "type": "node",
+      "name": "Node Debug Loomi",
+      "processId": "${command:PickProcess}",
+      "restart": true,
+      "request": "attach",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
