@@ -1,6 +1,6 @@
 import { NextFunction, Request } from "express"
 import jwt, { JwtPayload } from "jsonwebtoken"
-import { User } from "../repositories/userRepositories"
+import { User } from "../repositories/user-repository"
 import { ExtendedResponse } from "../routes/handlers"
 
 interface AccessTokenPayload extends JwtPayload, Omit<User, 'username' | 'password'> {}

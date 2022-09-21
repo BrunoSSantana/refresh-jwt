@@ -4,13 +4,14 @@ import { createRefreshToken } from '../helpers/refresh-token';
 import { setRefreshCookie } from '../helpers/set-refresh-cookie';
 import { withAccessAuth } from '../middlewares/acess-token-auth';
 import { withRefreshAuth } from '../middlewares/refresh-token-auth';
-import { User, users } from '../repositories/userRepositories'
+import { refreshTokenDB } from '../repositories/refresh-token-repository';
+import { User, users } from '../repositories/user-repository'
 
 // Extende Interface da response e do jwtPayload para adicionar o user
-export interface ExtendedResponse extends Response<any, { user: Partial<User>; refreshHash: string }> { }
-
-// Cria um banco in-memory para exemplificar o uso de um banco de dados real
-export const refreshTokenDB = new Map<string, string>()
+export interface ExtendedResponse extends Response<
+  any,
+  { user: Partial<User>; refreshHash: string }
+> {}
 
 export const router = Router();
 

@@ -19,7 +19,7 @@ export const users: User[] = [
     age: 25,
     social: 'http://ko.st/wa',
     username: 'brunossantana',
-    password: '123456'
+    password: 'Usuario123@'
   },
   {
     name: 'Russell Spencer',
