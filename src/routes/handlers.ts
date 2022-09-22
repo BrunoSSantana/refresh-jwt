@@ -1,7 +1,6 @@
 import { Response, Router } from 'express'
 
-import { withAccessAuth } from '../middlewares/acess-token-auth';
-import { User, users } from '../repositories/user-repository'
+import { User } from '../types/user';
 import { routerAuth } from './auth.routes';
 import { routerUser } from './user.routes';
 

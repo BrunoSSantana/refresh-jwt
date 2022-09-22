@@ -1,7 +1,7 @@
 import { createHmac } from 'crypto'
 import jwt from 'jsonwebtoken'
 import { refreshTokenDB } from '../repositories/refresh-token-repository'
-import { User } from "../repositories/user-repository"
+import { User } from '../types/user'
 import { env } from './env'
 
 export const createRefreshToken = (user: User) => {

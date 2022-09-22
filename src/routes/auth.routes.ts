@@ -19,7 +19,7 @@ routerAuth.post('/login', (req, res: ExtendedResponse) => {
   const user = users.find((user) => user.username === username && user.password === password)
 
   // se não encontrar o usuário, retorna erro
-  if (!user) return res.status(401).send('Unauthorized')
+  if (!user) return res.status(401).json({ statusCode: 401, message: 'Unauthorized' })
 
   // se encontrar o usuário, gera o token e refreshToken
   const accessToken = createAccessToken(user)
@@ -43,15 +43,12 @@ routerAuth.post('/refresh', withRefreshAuth, (_, res: ExtendedResponse) => {
 
   // busca o username no banco fake a partir do da hash refreshToken
   const username = refreshTokenDB.get(res.locals.refreshHash)
-  // console.log({username});
-  // console.table(refreshTokenDB);
 
   //  busca usuário a partir do username
   const user = users.find((user) => user.username === username)
-  // console.log({user});
 
   // se não encontrar o usuário e/ou username, retorna erro
-  if (!username || !user) return res.status(403).send('Could not find user for this refresh token')
+  if (!username || !user) return res.status(403).json({ statusCode: 403, message: 'Could not find user for this refresh token' })
 
   // cria token e refreshToken
   const accessToken = createAccessToken(user)

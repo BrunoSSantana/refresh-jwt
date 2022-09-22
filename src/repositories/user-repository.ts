@@ -1,10 +1,4 @@
-export type User = {
-  username: string
-  name: string
-  age: number
-  social: string
-  password: string
-}
+import { User } from "../types/user";
 
 export const users: User[] = [
   {
@@ -12,21 +6,27 @@ export const users: User[] = [
     age: 27,
     social: 'twitter.lsantos.dev',
     username: 'lsantosdev',
-    password: '123456'
+    password: '123456',
+    permissions: ['delete', 'read', "share", "upload_files", "upload_files", "write"],
+    roles: ['admin'],
   },
   {
     name: 'Bruno Santana',
     age: 25,
     social: 'http://ko.st/wa',
     username: 'brunossantana',
-    password: 'Usuario123@'
+    password: 'Usuario123@',
+    permissions: ['read', "share"],
+    roles: ['guest'],
   },
   {
     name: 'Russell Spencer',
     age: 66,
     social: 'http://egki.tp/ecbu',
     username: 'russellspencer',
-    password: '123456'
+    password: '123456',
+    permissions: ['read', "share", "upload_files"],
+    roles: ['user'],
   }
 ];
 

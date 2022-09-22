@@ -6,7 +6,7 @@ import { env } from '../helpers/env'
 
 export const withRefreshAuth = (req: Request, res: ExtendedResponse, next: NextFunction) => {
   const token = req.cookies['refresh-token']
-  if (!token) return res.status(401).send('Unauthorized')
+  if (!token) return res.status(401).json({ statusCode: 401, message: 'Unauthorized' })
 
   const accessTokenSecret = env<string>('ACCESS_TOKEN_SECRET')
   const refreshTokenSecret = env<string>('REFRESH_TOKEN_SECRET')
@@ -26,6 +26,6 @@ export const withRefreshAuth = (req: Request, res: ExtendedResponse, next: NextF
     next()
   } catch (error) {
     // se o token estiver inválido, retorna erro de não autorizado
-    return res.status(401).send('Unauthorized')
+    return res.status(401).json({ statusCode: 401, message: 'Unauthorized' })
   }
 }

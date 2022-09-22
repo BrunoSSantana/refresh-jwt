@@ -1,7 +1,10 @@
 import { Router } from "express";
 
 import { withAccessAuth } from "../middlewares/acess-token-auth";
-import { users, User } from "../repositories/user-repository";
+import { permissionAccessAuth } from "../middlewares/permission-auth";
+import { roleAccessAuth } from "../middlewares/role-auth";
+import { users } from "../repositories/user-repository";
+import { User } from "../types/user";
 
 export const routerUser = Router();
 
@@ -9,45 +12,60 @@ routerUser.get('/:username', withAccessAuth, (req, res) => {
   // busca o usuário no banco de dados com msm username
   const user = users.find((user) => user.username === req.params.username)
   // se não encontrar o usuário, retorna erro
-  if (!user) return res.status(404).send('User not found')
+  if (!user) return res.status(404).json({ statusCode: 404, message: 'User not found' })
 
   // retorna o usuário
   res.json(user)
 })
 
-routerUser.get('', withAccessAuth, (req, res) => {
-  // retorna todos os usuários
-  res.json(users)
-})
-
-routerUser.post('', withAccessAuth, (req, res) => {
-  // retorna todos os usuários
-
-  const { name, username, password, age, social } = req.body
-
-  const user: User = {
-    username,
-    password,
-    age,
-    social,
-    name
+routerUser.get('',
+  withAccessAuth,
+  permissionAccessAuth('read'),
+  roleAccessAuth('user'),
+  (req, res) => {
+    // retorna todos os usuários
+    res.json(users)
   }
+)
 
-  users.push(user)
+routerUser.post('',
+  withAccessAuth,
+  permissionAccessAuth('write'),
+  roleAccessAuth('user', 'guest', 'admin'),
+  (req, res) => {
+    // retorna todos os usuários
 
-  res.json(user)
-})
+    const { name, username, password, age, social, permissions, roles } = req.body
 
-routerUser.delete('/:username', withAccessAuth, (req, res) => {
-  // remove usuário
+    const user: User = {
+      username,
+      password,
+      age,
+      social,
+      name,
+      permissions,
+      roles,
+    }
 
-  const userIndex = users.findIndex(
-    (user) => user.username === req.params.username
-  )
+    users.push(user)
 
-  if (userIndex === -1) return res.status(404).send('User not found')
+    res.json(user)
+  }
+)
 
-  users.splice(userIndex, 1)
+routerUser.delete('/:username',
+  withAccessAuth,
+  roleAccessAuth('admin'),
+  (req, res) => {
+    // remove usuário
+    const userIndex = users.findIndex(
+      (user) => user.username === req.params.username
+    )
 
-  res.status(204).send()
-})
+    if (userIndex === -1) return res.status(404).json({ statusCode: 404, message: 'User not found' })
+
+    users.splice(userIndex, 1)
+
+    res.status(204).send()
+  }
+)

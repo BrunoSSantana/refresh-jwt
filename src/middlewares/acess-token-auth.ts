@@ -1,7 +1,8 @@
 import { NextFunction, Request } from "express"
 import jwt, { JwtPayload } from "jsonwebtoken"
-import { User } from "../repositories/user-repository"
+
 import { ExtendedResponse } from "../routes/handlers"
+import { User } from "../types/user"
 
 interface AccessTokenPayload extends JwtPayload, Omit<User, 'username' | 'password'> {}
 
@@ -10,8 +11,7 @@ export const withAccessAuth = (req: Request, res: ExtendedResponse, next: NextFu
   const token = req.headers['authorization']?.split('Bearer ')[1]
 
   // se não existir, retorna erro de não autorizado
-  if (!token) return res.status(401).send('Unauthorized')
-
+  if (!token) return res.status(401).json({ statusCode: 401, message: 'Unauthorized' })
 
   try {
     // verifica se o token é válido e pega os dados do payload
@@ -28,6 +28,6 @@ export const withAccessAuth = (req: Request, res: ExtendedResponse, next: NextFu
     next()
   } catch (error) {
     // se o token estiver inválido, retorna erro de não autorizado
-    return res.status(401).send('Unauthorized')
+    return res.status(401).json({ statusCode: 401, message: 'Unauthorized' })
   }
 }

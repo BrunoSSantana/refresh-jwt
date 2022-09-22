@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 
   const users = getUsers();
 
-  return res.send(users);
+  return res.json(users);
 })
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
